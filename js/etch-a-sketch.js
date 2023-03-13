@@ -1,9 +1,12 @@
 let slider = document.querySelector('.slider');
 let valueDisplay = document.querySelector('.value');
 let grid = document.querySelector('.grid');
+let shading = document.querySelector('.shading')
 
 
 let currentColor = "rgb(0, 0, 0)";
+
+let currentChoice = null;
 
 // function createSquares(multiplyer) {
 //     let rowWidth = grid.clientWidth / multiplyer;
@@ -54,15 +57,22 @@ valueDisplay.textContent = `${slider.value} x ${slider.value}`;
 createSquares(slider.value);
 syncSquares();
 
-// Tried to make hovering work on the etcha sketch
-// let mouseDown = false;
-// // document.body.addEventListener('mousedown', () => mouseDown = true);
-// // document.body.addEventListener('mouseup', () => mouseDown = false);
+// Tried to make holding click work on the etcha sketch
+let mouseDown = false;
+
+document.body.addEventListener('mousedown', () => {
+    mouseDown = true;
+    if (mouseDown) {console.log(mouseDown)};
+});
+document.body.addEventListener('mouseup', () => {
+    mouseDown = false;
+    console.log(mouseDown);
+});
 
 // document.body.onmousedown = () => (mouseDown = true);
 // document.body.onmouseup = () => (mouseDown = false);
 
-// if (true) {console.log(mouseDown)};
+
 
 slider.addEventListener('input', () => {
     valueDisplay.textContent = `${slider.value} x ${slider.value}`;
