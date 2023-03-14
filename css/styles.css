@@ -102,7 +102,27 @@ body {
     height: 50px;
     padding: 0;
     border: 5px solid #465448;
-    background-color: orange;
+    background-color:  rgba(68, 185, 68, 0.411);
+    border-radius: 2px;
+    box-shadow: -2px -2px 2px 1px rgb(47, 66, 47);
+}
+
+.option-container button:hover{
+    background-color: rgb(63, 226, 63);
+    transition: 0.15s;
+}
+
+.option-container button:focus{
+    outline-color: transparent;
+    outline-style: solid;
+    box-shadow: 0 0 0 2px rgb(116, 211, 116);
+    transition: 0.15s;
+}
+
+.option-container button:active{
+    transform: scale(0.95);
+    background-color: rgba(63, 226, 63, 0.562);
+    transition: 0.15s;
 }
 
 .color-container{

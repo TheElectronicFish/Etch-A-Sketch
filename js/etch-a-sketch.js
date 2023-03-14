@@ -1,12 +1,16 @@
 let slider = document.querySelector('.slider');
 let valueDisplay = document.querySelector('.value');
 let grid = document.querySelector('.grid');
-let shading = document.querySelector('.shading')
+let black = document.querySelector('.black');
+let color = document.querySelector('.color');
+let colorSelection = document.querySelector('.colorSelector');
+let shading = document.querySelector('.shading');
+let rainbow = document.querySelector('.rainbow');
+let clear = document.querySelector('.clear');
 
-
-let currentColor = "rgb(0, 0, 0)";
-
-let currentChoice = null;
+let mouseDown = false;
+let currentColor = '#000000';
+let currentChoice = 'black';
 
 // function createSquares(multiplyer) {
 //     let rowWidth = grid.clientWidth / multiplyer;
@@ -34,6 +38,7 @@ function createSquares(multiplyer) {
         for (let i = 0; i < (multiplyer * multiplyer); i++) {
             let square = document.createElement('div');
             square.setAttribute('style', `display: flex; flex-direction: row; height: ${height}; width: ${width}px;border: 1px; border-style: solid; background-color: white`);
+            square.classList.add('square');
             grid.appendChild(square);
         }
     }
@@ -44,56 +49,66 @@ function removeSquares(parent) {
     // while(grid.firstChild) {
     //     grid.removeChild(grid.lastChild);
     // }
-    parent.innerHTML='';
+    grid.innerHTML='';
 }
 
 function syncSquares () {
     squares = document.querySelectorAll('.square');
-    // grid.addEventListener('mousedown', () => {
-    // })
+
+    squares.forEach(square => {
+        square.addEventListener('mouseover', () => {
+            if (mouseDown) {
+                square.style.backgroundColor = currentColor;
+            };
+        })
+    });
     }
 
 valueDisplay.textContent = `${slider.value} x ${slider.value}`;
 createSquares(slider.value);
 syncSquares();
 
-// Tried to make holding click work on the etcha sketch
-let mouseDown = false;
 
 document.body.addEventListener('mousedown', () => {
     mouseDown = true;
-    if (mouseDown) {console.log(mouseDown)};
-});
+})
+
 document.body.addEventListener('mouseup', () => {
     mouseDown = false;
-    console.log(mouseDown);
-});
-
-// document.body.onmousedown = () => (mouseDown = true);
-// document.body.onmouseup = () => (mouseDown = false);
-
-
+})
 
 slider.addEventListener('input', () => {
     valueDisplay.textContent = `${slider.value} x ${slider.value}`;
-});
+})
 
 slider.addEventListener('mouseup', () => {
     removeSquares(grid);
     createSquares(slider.value);
     syncSquares();
-});
+})
+
+black.addEventListener('click', () => {
+    currentColor = '#000000';
+})
+
+color.addEventListener('click', () => {
+    currentColor = colorSelection.value;
+})
+
+colorSelection.addEventListener('input', () => {
+    currentColor = colorSelection.value;
+})
+
+clear.addEventListener('click', () => {
+    removeSquares(grid);
+    createSquares(slider.value);
+    syncSquares();
+})
 
 
 
 
-if (mouseDown == true) {
-    squares.forEach(square => {
-        square.addEventListener('mouseover', () => {
-            square.style.backgroundColor = currentColor;
-        })
-    });
-}
+
 
 
 
