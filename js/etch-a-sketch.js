@@ -60,13 +60,14 @@ function syncSquares () {
     squares.forEach(square => {
         square.addEventListener('mouseover', (e) => {
             if (mouseDown) {
-                // if(shadeToggle) {
+                if(shadingToggle) {
                 //     var r = square.style.r;
                 //     var g = square.style.g;
                 //     var g
-                //     CurColor = square.style.backgroundColor;
+                    CurColor = square.style.backgroundColor;
+                    console.log(CurColor);
                 //     square.style.backgroundColor = 
-                if(rainbowToggle) {
+                }else if(rainbowToggle) {
                     var r = (Math.random() * 255);
                     var g = (Math.random() * 255);
                     var b = (Math.random() * 255);
