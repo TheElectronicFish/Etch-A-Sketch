@@ -6,11 +6,13 @@ let color = document.querySelector('.color');
 let colorSelection = document.querySelector('.colorSelector');
 let shading = document.querySelector('.shading');
 let rainbow = document.querySelector('.rainbow');
+let border = document.querySelector('.border')
 let clear = document.querySelector('.clear');
 
 let mouseDown = false;
 let currentColor = '#000000';
-let currentChoice = 'black';
+let shadingToggle = false;
+let rainbowToggle = false;
 
 // function createSquares(multiplyer) {
 //     let rowWidth = grid.clientWidth / multiplyer;
@@ -56,13 +58,41 @@ function syncSquares () {
     squares = document.querySelectorAll('.square');
 
     squares.forEach(square => {
-        square.addEventListener('mouseover', () => {
+        square.addEventListener('mouseover', (e) => {
             if (mouseDown) {
-                square.style.backgroundColor = currentColor;
+                // if(shadeToggle) {
+                //     var r = square.style.r;
+                //     var g = square.style.g;
+                //     var g
+                //     CurColor = square.style.backgroundColor;
+                //     square.style.backgroundColor = 
+                if(rainbowToggle) {
+                    var r = (Math.random() * 255);
+                    var g = (Math.random() * 255);
+                    var b = (Math.random() * 255);
+
+                    e.target.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                }else{
+                    square.style.backgroundColor = currentColor;
+                };
             };
-        })
+        });
+        square.ondragstart = function() {
+            return false;
+          };
     });
     }
+
+// function shadeSquares () {
+//     if (shadingToggle) {
+//         squares.forEach(square) => {
+//             square.addEventListener();
+//         };
+//         prevColor = 'blue';
+//     }else if (shadingToggle == false) {
+//         return;
+//     }
+// }
 
 valueDisplay.textContent = `${slider.value} x ${slider.value}`;
 createSquares(slider.value);
@@ -71,10 +101,12 @@ syncSquares();
 
 document.body.addEventListener('mousedown', () => {
     mouseDown = true;
+    console.log(mouseDown);
 })
 
 document.body.addEventListener('mouseup', () => {
     mouseDown = false;
+    console.log(mouseDown);
 })
 
 slider.addEventListener('input', () => {
@@ -88,10 +120,14 @@ slider.addEventListener('mouseup', () => {
 })
 
 black.addEventListener('click', () => {
+    rainbowToggle = false;
+    shadingToggle = false;
     currentColor = '#000000';
 })
 
 color.addEventListener('click', () => {
+    rainbowToggle = false;
+    shadingToggle = false;
     currentColor = colorSelection.value;
 })
 
@@ -99,12 +135,36 @@ colorSelection.addEventListener('input', () => {
     currentColor = colorSelection.value;
 })
 
+shading.addEventListener('click', () => {
+    if (shadingToggle == false) {
+        shadingToggle = true;
+        rainbowToggle = false;
+        // shadeSquares();
+    }else if(shadingToggle == true){ 
+        shadingToggle = false;
+    }
+})
+
+rainbow.addEventListener('click', () => {
+    shadingToggle = false;
+    if (rainbowToggle == false) {
+        rainbowToggle = true;
+    }else if (rainbowToggle = true) {
+        rainbowToggle = false;
+    }
+})
+
+border.addEventListener('click', () => {
+    squares.forEach(square => {
+        square.classList.toggle('no-border');
+    });
+})
+
 clear.addEventListener('click', () => {
     removeSquares(grid);
     createSquares(slider.value);
     syncSquares();
 })
-
 
 
 

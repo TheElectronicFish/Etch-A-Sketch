@@ -90,6 +90,10 @@ body {
     flex: 1 1 auto;
 }
 
+.slider {
+    flex: 1 1 auto;
+}
+
 .option-container{
     display: flex;
     flex-direction: column;
@@ -143,8 +147,8 @@ body {
     flex: 0 0 auto;
 }
 
-.slider {
-    flex: 1 1 auto;
+.content .grid .no-border.square {
+    border: none !important;
 }
 
 .footer {
