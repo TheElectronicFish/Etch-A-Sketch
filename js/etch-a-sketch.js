@@ -10,7 +10,7 @@ let border = document.querySelector('.border')
 let clear = document.querySelector('.clear');
 
 let mouseDown = false;
-let currentColor = '#000000';
+let currentColor = 'rgb(0, 0, 0)';
 let shadingToggle = false;
 let rainbowToggle = false;
 
@@ -39,7 +39,7 @@ function createSquares(multiplyer) {
 
         for (let i = 0; i < (multiplyer * multiplyer); i++) {
             let square = document.createElement('div');
-            square.setAttribute('style', `display: flex; flex-direction: row; height: ${height}; width: ${width}px;border: 1px; border-style: solid; background-color: white`);
+            square.setAttribute('style', `display: flex; flex-direction: row; height: ${height}; width: ${width}px;border: 1px; border-style: solid; background-color: rgb(255, 255, 255)`);
             square.classList.add('square');
             grid.appendChild(square);
         }
@@ -61,18 +61,29 @@ function syncSquares () {
         square.addEventListener('mouseover', (e) => {
             if (mouseDown) {
                 if(shadingToggle) {
-                //     var r = square.style.r;
-                //     var g = square.style.g;
-                //     var g
-                    CurColor = square.style.backgroundColor;
-                    console.log(CurColor);
-                //     square.style.backgroundColor = 
-                }else if(rainbowToggle) {
-                    var r = (Math.random() * 255);
-                    var g = (Math.random() * 255);
-                    var b = (Math.random() * 255);
+                    curColor = square.style.backgroundColor.substring(4, square.style.backgroundColor.length-1);
+                    curColor = curColor.split(", ");
 
-                    e.target.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                    curColor.forEach((color) => {
+                        color = +color-(256/10);
+
+                        if(color <= 0) {
+                            color = 0;
+                        } else if(color >= 255) {
+                            color = 255;
+                        };
+                        curColor.push(color);
+                    });
+                    curColor = curColor.slice(3,6);
+                    square.style.backgroundColor =  `rgb(${curColor[0]}, ${curColor[1]}, ${curColor[2]})`;
+                    console.log(curColor);
+
+                }else if(rainbowToggle) {
+                var r = (Math.random() * 255);
+                var g = (Math.random() * 255);
+                var b = (Math.random() * 255);
+
+                e.target.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
                 }else{
                     square.style.backgroundColor = currentColor;
                 };
@@ -82,7 +93,7 @@ function syncSquares () {
             return false;
           };
     });
-    }
+}
 
 // function shadeSquares () {
 //     if (shadingToggle) {
@@ -102,12 +113,10 @@ syncSquares();
 
 document.body.addEventListener('mousedown', () => {
     mouseDown = true;
-    console.log(mouseDown);
 })
 
 document.body.addEventListener('mouseup', () => {
     mouseDown = false;
-    console.log(mouseDown);
 })
 
 slider.addEventListener('input', () => {
@@ -137,9 +146,9 @@ colorSelection.addEventListener('input', () => {
 })
 
 shading.addEventListener('click', () => {
+    rainbowToggle = false;
     if (shadingToggle == false) {
         shadingToggle = true;
-        rainbowToggle = false;
         // shadeSquares();
     }else if(shadingToggle == true){ 
         shadingToggle = false;
