@@ -14,25 +14,6 @@ let currentColor = 'rgb(0, 0, 0)';
 let shadingToggle = false;
 let rainbowToggle = false;
 
-// function createSquares(multiplyer) {
-//     let rowWidth = grid.clientWidth / multiplyer;
-    
-//     for (let i = 0; i < multiplyer; i++) {
-//         let row = document.createElement('div');
-//         row.setAttribute('style', `display: flex; flex-direction: column; height: 100%; width: ${rowWidth}px`);
-//         grid.appendChild(row);
-//         let squareHeight = row.clientHeight / multiplyer;
-
-//         for (let i = 0; i < multiplyer; i++) {
-//             let square = document.createElement('div');
-//             square.setAttribute('style', `width: 100%; height: ${squareHeight}px; border: 1px; border-style: solid; background-color: white`);
-//             square.classList.add('square');
-//             row.appendChild(square);
-//         }
-
-//     }
-// }
-
 function createSquares(multiplyer) {
         let width = grid.clientWidth / multiplyer;
         let height = grid.clientHeight / multiplyer;
@@ -62,28 +43,25 @@ function syncSquares () {
             if (mouseDown) {
                 if(shadingToggle) {
                     curColor = square.style.backgroundColor.substring(4, square.style.backgroundColor.length-1);
-                    curColor = curColor.split(", ");
 
-                    curColor.forEach((color) => {
-                        color = +color-(256/10);
-
+                    curColor = curColor.split(", ").map(color => {
+                        color = +color-(256/10)
                         if(color <= 0) {
                             color = 0;
                         } else if(color >= 255) {
                             color = 255;
                         };
-                        curColor.push(color);
-                    });
-                    curColor = curColor.slice(3,6);
+                        return color;
+                });
+
                     square.style.backgroundColor =  `rgb(${curColor[0]}, ${curColor[1]}, ${curColor[2]})`;
-                    console.log(curColor);
 
                 }else if(rainbowToggle) {
-                var r = (Math.random() * 255);
-                var g = (Math.random() * 255);
-                var b = (Math.random() * 255);
+                    var r = (Math.random() * 255);
+                    var g = (Math.random() * 255);
+                    var b = (Math.random() * 255);
 
-                e.target.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                    e.target.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
                 }else{
                     square.style.backgroundColor = currentColor;
                 };
@@ -94,17 +72,6 @@ function syncSquares () {
           };
     });
 }
-
-// function shadeSquares () {
-//     if (shadingToggle) {
-//         squares.forEach(square) => {
-//             square.addEventListener();
-//         };
-//         prevColor = 'blue';
-//     }else if (shadingToggle == false) {
-//         return;
-//     }
-// }
 
 valueDisplay.textContent = `${slider.value} x ${slider.value}`;
 createSquares(slider.value);
@@ -149,7 +116,6 @@ shading.addEventListener('click', () => {
     rainbowToggle = false;
     if (shadingToggle == false) {
         shadingToggle = true;
-        // shadeSquares();
     }else if(shadingToggle == true){ 
         shadingToggle = false;
     }
