@@ -5,14 +5,16 @@ let black = document.querySelector('.black');
 let color = document.querySelector('.color');
 let colorSelection = document.querySelector('.colorSelector');
 let shading = document.querySelector('.shading');
+let lighten = document.querySelector('.lighten');
 let rainbow = document.querySelector('.rainbow');
-let border = document.querySelector('.border')
+let border = document.querySelector('.border');
+let eraser = document.querySelector('.eraser');
 let clear = document.querySelector('.clear');
 
 let mouseDown = false;
 let currentColor = 'rgb(0, 0, 0)';
-let shadingToggle = false;
-let rainbowToggle = false;
+let mode = 'black';
+let shade = 0;
 
 function createSquares(multiplyer) {
         let width = grid.clientWidth / multiplyer;
@@ -35,38 +37,42 @@ function removeSquares(parent) {
     grid.innerHTML='';
 }
 
+function colorSquares (e) {
+    if (e.type === 'mouseover' && !mouseDown) return;
+
+    if(mode == 'shading' || mode =='lighten') {
+        curColor = e.target.style.backgroundColor.substring(4, e.target.style.backgroundColor.length-1).split(", ").map(color => {
+            color = +color+(shade)
+            if(color <= 0) {
+                color = 0;
+            } else if(color >= 255) {
+                color = 255;
+            };
+            return color;
+        });
+        e.target.style.backgroundColor =  `rgb(${curColor[0]}, ${curColor[1]}, ${curColor[2]})`;
+
+    }else if(mode == 'rainbow') {
+        var r = (Math.random() * 255);
+        var g = (Math.random() * 255);
+        var b = (Math.random() * 255);
+
+        e.target.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+    }else if(mode == 'black'){
+        e.target.style.backgroundColor = currentColor;
+    }else if(mode == 'color'){
+        e.target.style.backgroundColor = colorSelection.value;
+    }else if(mode == 'eraser') {
+        e.target.style.backgroundColor = 'rgb(255, 255, 255)';
+    };
+}
+
 function syncSquares () {
     squares = document.querySelectorAll('.square');
 
     squares.forEach(square => {
-        square.addEventListener('mouseover', (e) => {
-            if (mouseDown) {
-                if(shadingToggle) {
-                    curColor = square.style.backgroundColor.substring(4, square.style.backgroundColor.length-1);
-
-                    curColor = curColor.split(", ").map(color => {
-                        color = +color-(256/10)
-                        if(color <= 0) {
-                            color = 0;
-                        } else if(color >= 255) {
-                            color = 255;
-                        };
-                        return color;
-                });
-
-                    square.style.backgroundColor =  `rgb(${curColor[0]}, ${curColor[1]}, ${curColor[2]})`;
-
-                }else if(rainbowToggle) {
-                    var r = (Math.random() * 255);
-                    var g = (Math.random() * 255);
-                    var b = (Math.random() * 255);
-
-                    e.target.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-                }else{
-                    square.style.backgroundColor = currentColor;
-                };
-            };
-        });
+        square.addEventListener('mouseover', e => colorSquares(e));
+        square.addEventListener('mousedown', e => colorSquares(e));
         square.ondragstart = function() {
             return false;
           };
@@ -97,43 +103,40 @@ slider.addEventListener('mouseup', () => {
 })
 
 black.addEventListener('click', () => {
-    rainbowToggle = false;
-    shadingToggle = false;
+    mode = 'black';
     currentColor = '#000000';
 })
 
 color.addEventListener('click', () => {
-    rainbowToggle = false;
-    shadingToggle = false;
-    currentColor = colorSelection.value;
+    mode = 'color';
 })
 
 colorSelection.addEventListener('input', () => {
-    currentColor = colorSelection.value;
+    mode = 'color';
 })
 
 shading.addEventListener('click', () => {
-    rainbowToggle = false;
-    if (shadingToggle == false) {
-        shadingToggle = true;
-    }else if(shadingToggle == true){ 
-        shadingToggle = false;
-    }
+    mode = 'shading';
+    shade = (-256/10)
+})
+
+lighten.addEventListener('click', () => {
+    mode = 'lighten';
+    shade = (+256/10)
 })
 
 rainbow.addEventListener('click', () => {
-    shadingToggle = false;
-    if (rainbowToggle == false) {
-        rainbowToggle = true;
-    }else if (rainbowToggle = true) {
-        rainbowToggle = false;
-    }
+    mode = 'rainbow';
 })
 
 border.addEventListener('click', () => {
     squares.forEach(square => {
         square.classList.toggle('no-border');
     });
+})
+
+eraser.addEventListener('click', () => {
+    mode = 'eraser';
 })
 
 clear.addEventListener('click', () => {
